@@ -3,10 +3,13 @@ const exec = require("child_process").exec;
 const path = require("path");
 const async = require("async");
 
-const projectPath = process.argv[2];
+const index = (process.argv[2].startsWith("-")?3:2)
+const projectPath = process.argv[index];
+const repos = process.argv.filter((arg, index) => { return index > index; })
+
 const absolutePath = path.join(__dirname, projectPath);
 
-const cmds = ["git stash && git pull"].concat(process.argv.filter((arg, index) => { return index > 2; })).concat[" && git stash pop"];
+const cmds = ["git stash", "git pull", "git stash pop"].concat(repos);
 
 const execCmds = cmds.map((cmd) => {
 	return function(callback) {
@@ -26,11 +29,9 @@ const updateProject = function(callback) {
 	});
 };
 
-http.createServer(function (req, res) {
-    res.writeHead(200, {"Content-Type": "text/plain"});
+const doRun = (func) => {
     console.log("An event has been detected on the listened port: starting execution...")
-
-	updateProject((e, result) => {
+    updateProject((e, result) => {
 		let response = "";
 	    if(e) {
 	    	console.error(`exec error: ${e}`);
@@ -40,8 +41,15 @@ http.createServer(function (req, res) {
 	    	console.log(result);
 	    	response += `\n ${result}`;
 	    }
-		res.end(response);
+        func(response)
 	});
+}
 
-}).listen(1337);
+if (process.argv.includes("-t"))
+    doRun((r)=>{})
+else 
+    http.createServer(function (req, res) {
+        res.writeHead(200, {"Content-Type": "text/plain"});
+        doRun((r) => res.end(r))
+    }).listen(1338);
 console.log("Git-auto-pull is running");

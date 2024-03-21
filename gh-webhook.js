@@ -9,7 +9,7 @@ const repos = process.argv.filter((arg, i) => { return i > index; })
 
 const absolutePath = path.join(__dirname, projectPath);
 
-const cmds = ["git fetch", "git reset --hard HEAD", "git merge '@{u}'"].concat(repos);
+const cmds = ["git fetch", "git reset --hard HEAD", "git merge '@{u}', yarn generate"].concat(repos);
 
 const execCmds = cmds.map((cmd) => {
 	return function (callback) {

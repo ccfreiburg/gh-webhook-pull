@@ -1,7 +1,7 @@
 {
   "name": "git-web-pull",
   "version": "0.0.1",
-  "description": "Web endpoint for web hook to do  'stach pull unstach'",
+  "description": "Web endpoint for web hook to pull new version",
   "main": "git-web-pull.js",
   "license": "MIT",
   "dependencies": {
